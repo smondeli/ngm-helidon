@@ -6,9 +6,8 @@ failImmediatelyOnError: true
 env:
   exportedVariables:
     - appversion
-  env:
-    variables:
-      "JAVA_HOME": "/usr/lib64/graalvm/graalvm22-ee-java11"
+  variables:
+    "JAVA_HOME": "/usr/lib64/graalvm/graalvm22-ee-java11"
 
 steps:
   - type: Command
