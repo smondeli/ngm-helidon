@@ -2,13 +2,17 @@ package org.sreekanth.ngm;
 
 import io.helidon.common.configurable.Resource;
 
-import javax.json.*;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonBuilderFactory;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Path("/")
 public class FrontEndResource {
@@ -31,43 +35,23 @@ public class FrontEndResource {
     @Path("/items")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public JsonArray listing() {
-        return JSON.createArrayBuilder()
-                .add(JSON.createObjectBuilder()
-                        .add("name", "Apple")
-                        .add("price", 3)
-                        .add("category", "Fruit")
-                )
-                .add(JSON.createObjectBuilder()
-                        .add("name", "Banana")
-                        .add("price", 2)
-                        .add("category", "Fruit")
-                )
-                .add(JSON.createObjectBuilder()
-                        .add("name", "Peach")
-                        .add("price", 3)
-                        .add("category", "Fruit")
-                )
-                .add(JSON.createObjectBuilder()
-                        .add("name", "Broccoli")
-                        .add("price", 3)
-                        .add("category", "Vegetable")
-                )
-                .add(JSON.createObjectBuilder()
-                        .add("name", "Kale")
-                        .add("price", 5)
-                        .add("category", "Vegetable")
-                )
-                .add(JSON.createObjectBuilder()
-                        .add("name", "Chicken alfredo")
-                        .add("price", 7)
-                        .add("category", "Pasta")
-                )
-                .add(JSON.createObjectBuilder()
-                        .add("name", "Pie")
-                        .add("price", 4)
-                        .add("category", "Dessert")
-                )
-                .build();
+    public JsonArray items() {
+        List<Item> items = new ArrayList<>();
+        items.add(new Item("Apple","Fruit", 3));
+        items.add(new Item("Banana", "Fruit", 2));
+        items.add(new Item("Peach", "Fruit", 3));
+        items.add(new Item("Broccoli", "Vegetable", 3));
+        items.add(new Item("Kale", "Vegetable", 5));
+        items.add(new Item("Chicken alfredo", "Pasta", 7));
+        items.add(new Item("Pie", "Dessert", 4));
+        JsonArrayBuilder jsonBuilder = JSON.createArrayBuilder();
+        for(Item item:items){
+            jsonBuilder.add(JSON.createObjectBuilder()
+                    .add("name", item.getName())
+                    .add("category", item.getCategory())
+                    .add("price", item.getPrice())
+            );
+        }
+        return jsonBuilder.build();
     }
 }
