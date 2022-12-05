@@ -11,7 +11,7 @@ env:
 
 steps:
   - type: Command
-    name: "Install the latest GraalVM Enterprise 22.x for Java 11 - JDK and Native Image"
+    name: "Install graalvm22-ee-11-native-image"
     command: |
       yum -y install graalvm22-ee-11-native-image
   - type: Command
