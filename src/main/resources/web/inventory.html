@@ -12,15 +12,72 @@
         document.location.href = "/"
     }
 
-    function onViewCart() {
-        document.location.href = "/cart";
-    }
-
     function loadData(selectedCategory) {
+        fetch("/items", {
+            "method": "GET",
+            "headers": {
+                "content-type": "application/json",
+                "accept": "application/json"
+            }
+        })
+            .then(response => response.json())
+            .then(response => {
+                var listing = document.getElementById("listing");
+                var leftNav = document.getElementById("left-nav");
+                listing.innerText = "";
+                leftNav.innerText = "";
+                const categories = new Set();
+                const catDisplay = document.createElement("div");
+                catDisplay.className = "header";
+                catDisplay.style = "text-align: left;font-size: 18;";
+                catDisplay.innerHTML = "Category";
+                leftNav.append(catDisplay);
+                categories.add("All");
+                for (let i in response) {
+                    let item = response[i]
+                    let itemName = item.name;
+                    let itemPrice = item.price;
+                    categories.add(item.category);
 
+                    var itemDiv = document.createElement("div");
+                    itemDiv.className = "item"
+                    listing.append(itemDiv);
+                    if (selectedCategory != "All" && selectedCategory != item.category) {
+                        itemDiv.style.display = 'none';
+                    }
+
+                    var itemImageDiv = document.createElement("div");
+                    itemImageDiv.className = "item-image"
+                    var itemImageSrc = document.createElement("img");
+                    itemImageSrc.src = "images/" + itemName + ".png"
+                    itemImageDiv.append(itemImageSrc)
+                    itemDiv.append(itemImageDiv);
+
+                    var itemPriceDiv = document.createElement("div");
+                    itemPriceDiv.className = "item-price"
+                    itemPriceDiv.innerText = "$" + itemPrice
+                    itemDiv.append(itemPriceDiv)
+
+                    var itemDescriptionDiv = document.createElement("div");
+                    itemDescriptionDiv.className = "item-details";
+                    itemDescriptionDiv.innerText = itemName;
+                    itemDiv.append(itemDescriptionDiv);
+
+                }
+                for (const category of categories) {
+                    let cat = document.createElement("button");
+                    cat.className = "category_List";
+                    cat.addEventListener('click', function () {
+                        loadData(category);
+                    });
+                    cat.innerText = category;
+                    leftNav.append(cat);
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            });
     }
-
-
 </script>
 
 <body>
@@ -30,7 +87,7 @@
     <div class="right_user_div">
         <img class="title_img" src="images/user.svg" height="100%"/>
         <p float="left" height="100%" class="right_user_div_p">
-            Hi, <span th:text="${user.username}"/>
+            Hi, Heledon
         </p>
         <a style="padding-left: 10px" href="javascript:onLogoutClick();">
             <img style="float: right" src="images/logout.svg" height="100%" title="Log out"/>
@@ -47,33 +104,14 @@
             <div class="header" style="text-align: left;font-size: large;">
                 Category
             </div>
-            <div>
-                <button class="category_List" th:text="All"></button>
-            </div>
-            <tr th:each="category : ${categories}">
-                <div>
-                    <button class="category_List" th:text="${category}"></button>
-                </div>
-            </tr>
         </div>
-        <div class="market_listing" id="listing">
-            <tr th:each="item : ${items}">
-                <div class="item">
-                    <div class="item-image">
-                        <img src="'images/'+${item.name}+'.png'"
-                             th:src="@{'/images/'+${item.name}+'.png'}" />
-                    </div>
-                    <div class="item-price">
-                        $<span th:text="${item.price}"/>
-                    </div>
-                    <div class="item-details">
-                        <span th:text="${item.name}"/>
-                    </div>
-                </div>
-            </tr>
-        </div>
+        <div class="market_listing" id="listing"></div>
     </div>
 </div>
+
+<script>
+    loadData("All");
+</script>
 
 <div class="footer">
     Powered by <a href="https://www.oracle.com/cloud/">Application created using Helidon Framework</a>
