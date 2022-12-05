@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>NGM</title>
+    <link href="css/styles.css" rel="stylesheet" type="text/css"/>
+</head>
+
+<script>
+    function onLogoutClick() {
+        document.cookie = "";
+        document.location.href = "/"
+    }
+
+    function onViewCart() {
+        document.location.href = "/cart";
+    }
+
+    function loadData(selectedCategory) {
+
+    }
+
+
+</script>
+
+<body>
+<div class="title" id="market">
+    <img class="title_img" src="images/logo_transparent.png" height="100%"/>
+    <p class="title_p">Neighbourhood Grocery Market</p>
+    <div class="right_user_div">
+        <img class="title_img" src="images/user.svg" height="100%"/>
+        <p float="left" height="100%" class="right_user_div_p">
+            Hi, <span th:text="${user.username}"/>
+        </p>
+        <a style="padding-left: 10px" href="javascript:onLogoutClick();">
+            <img style="float: right" src="images/logout.svg" height="100%" title="Log out"/>
+        </a>
+    </div>
+</div>
+
+<div class="header">Market Place</div>
+<div class="main_div">
+    <div class="content_div">
+        <div id="error_header"
+             style="color: red; font-size: 20; display: inline; margin-left: -60px;"></div>
+        <div class="left_navigation" id="left-nav">
+            <div class="header" style="text-align: left;font-size: large;">
+                Category
+            </div>
+            <div>
+                <button class="category_List" th:text="All"></button>
+            </div>
+            <tr th:each="category : ${categories}">
+                <div>
+                    <button class="category_List" th:text="${category}"></button>
+                </div>
+            </tr>
+        </div>
+        <div class="market_listing" id="listing">
+            <tr th:each="item : ${items}">
+                <div class="item">
+                    <div class="item-image">
+                        <img src="'images/'+${item.name}+'.png'"
+                             th:src="@{'/images/'+${item.name}+'.png'}" />
+                    </div>
+                    <div class="item-price">
+                        $<span th:text="${item.price}"/>
+                    </div>
+                    <div class="item-details">
+                        <span th:text="${item.name}"/>
+                    </div>
+                </div>
+            </tr>
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    Powered by <a href="https://www.oracle.com/cloud/">Application created using Helidon Framework</a>
+</div>
+</body>
+</html>
