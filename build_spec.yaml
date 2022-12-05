@@ -1,0 +1,23 @@
+version: 0.1
+component: build
+timeoutInSeconds: 10000
+shell: bash
+failImmediatelyOnError: true
+env:
+  exportedVariables:
+    - appversion
+
+steps:
+  - type: Command
+    name: "Set app version"
+    command: |
+      appversion=`date +%Y%m%d%H%M%S`
+  - type: Command
+    name: "Build app"
+    command: |
+      mvn clean package
+
+outputArtifacts:
+  - name: ngm-helidon-jar
+    type: BINARY
+    location: ${OCI_PRIMARY_SOURCE_DIR}/target/ngm-helidon.jar
