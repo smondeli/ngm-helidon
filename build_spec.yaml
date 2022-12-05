@@ -6,8 +6,19 @@ failImmediatelyOnError: true
 env:
   exportedVariables:
     - appversion
+  env:
+    variables:
+      "JAVA_HOME": "/usr/lib64/graalvm/graalvm22-ee-java11"
 
 steps:
+  - type: Command
+    name: "Install the latest GraalVM Enterprise 22.x for Java 11 - JDK and Native Image"
+    command: |
+      yum -y install graalvm22-ee-11-native-image
+  - type: Command
+    name: "Set the PATH"
+    command: |
+      export PATH=$JAVA_HOME/bin:$PATH
   - type: Command
     name: "Set app version"
     command: |
