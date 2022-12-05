@@ -20,12 +20,26 @@ class MainTest {
 
     @Test
     void testHelloWorld() {
-        JsonObject jsonObject = target
-                .path("greet")
+        try (Response r = target
+                .path("/")
                 .request()
-                .get(JsonObject.class);
-        Assertions.assertEquals("Hello World!", jsonObject.getString("message"),
-                "default message");
+                .get()) {
+            Assertions.assertEquals(200, r.getStatus(), "GET / status");
+        }
+
+        try (Response r = target
+                .path("/inventory")
+                .request()
+                .get()) {
+            Assertions.assertEquals(200, r.getStatus(), "GET /inventory status");
+        }
+
+        try (Response r = target
+                .path("/items")
+                .request()
+                .get()) {
+            Assertions.assertEquals(200, r.getStatus(), "GET /items status");
+        }
 
         try (Response r = target
                 .path("metrics")

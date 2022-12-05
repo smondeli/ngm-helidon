@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Path("/")
-public class FrontEndResource {
+public class Controller {
     private static final JsonBuilderFactory JSON = Json.createBuilderFactory(Collections.emptyMap());
 
     @Path("/")
